@@ -1,23 +1,22 @@
-package com.example.keymanage;
+package com.example.keymanage.controller;
 
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
 
 /**
  * @Description: $
  * @Param: $
  * @return: $
- * @Author: yu peng
- * @date: 2018.7.17
+ * @Author: your name
+ * @date: 2018.7.30$
  */
 @Controller
-@RequestMapping("/hello")
-public class HelloController {
-    @GetMapping(value = "/say")
+@RequestMapping("/home")
+public class HomeController {
+    @GetMapping(value = "/index")
     public String say()
     {
-        return "login.html";
+        return "index.html";
     }
 }
