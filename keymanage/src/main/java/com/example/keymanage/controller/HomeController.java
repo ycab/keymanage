@@ -17,6 +17,13 @@ public class HomeController {
     @GetMapping(value = "/index")
     public String say()
     {
-        return "index.html";
+        return "Home/index.html";
     }
+    @GetMapping(value = "/login")
+    public String login()
+    {
+        return "Home/login.html";
+    }
+    @GetMapping(value = "/supermanage")
+    public String supermanage() { return "SuperManage/supermanage.html"; }
 }

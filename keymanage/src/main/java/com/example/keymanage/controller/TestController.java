@@ -23,13 +23,12 @@ import java.util.List;
 public class TestController {
     @Autowired
     private PeopleManageRepository c;
-    @PostMapping(value="/checkinfo")
+    @PostMapping(value="/test")
     public String Login(HttpServletRequest request )
     {
         String a=request.getParameter("username");
         String b=request.getParameter("pwd");
         List<PeopleManage> d=c.selectall();
-        d.get(1).
         return "ok";
     }
 }

@@ -3,6 +3,7 @@ package com.example.keymanage.model;
 
 
 import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 
 /**
@@ -14,13 +15,14 @@ import javax.persistence.Id;
  */
 @Entity
 public class PeopleManage {
-    @Id
+    @GeneratedValue
     private String id;
     private String name;
     private String password;
     private String company;
     private String department;
     private String authority;
+    @Id
     private String phone;
 
     public String getId() {

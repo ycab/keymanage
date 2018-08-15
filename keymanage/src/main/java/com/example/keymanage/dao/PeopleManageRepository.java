@@ -7,8 +7,9 @@ import org.springframework.data.jpa.repository.Query;
 
 import java.util.List;
 
-public interface PeopleManageRepository extends JpaRepository<PeopleManage,Integer> {
-    public List<PeopleManage> findByPhoneAndPassword(String phone,String password);
+public interface PeopleManageRepository extends JpaRepository<PeopleManage,String> {
+    public List<PeopleManage> findByAuthority(String authority);
     @Query(value = "select * from people_manage",nativeQuery = true)
-    List<PeopleManage> selectall();
+    public List<PeopleManage> selectall();
+    public List<PeopleManage> findByPhone(String phone);
 }
