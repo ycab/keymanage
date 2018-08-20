@@ -7,7 +7,8 @@ import org.springframework.data.jpa.repository.Query;
 import java.util.List;
 
 public interface GoodsManageRepository extends JpaRepository<GoodsManage,Integer>{
-    public List<GoodsManage> findByid(Integer age);
+      public List<GoodsManage> findByMac(String mac);
+
 
 
 }

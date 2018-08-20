@@ -13,42 +13,21 @@ import javax.servlet.http.HttpServletRequest;
 import java.util.List;
 
 /**
- * @Description: 人员管理$
+ * @Description: 管理员管理$
  * @Param: $
  * @return: $
  * @Author: your name
  * @date: $
  */
 @RestController
-@RequestMapping("/user")
-public class UserController {
+@RequestMapping("/manager")
+public class ManagerController {
     @Autowired
     private PeopleManageRepository peopleManageRepository;
-    @PostMapping("/usercodeedit")
-    public String usercodemanage(HttpServletRequest request)
-    {
-        String result="";
-       String phone=request.getParameter("phone");
-       phone="18351930228";
-       String oldpassword=request.getParameter("oldpassword");
-       String newpassword=request.getParameter("newpassword");
-       List<PeopleManage> peopleManages=peopleManageRepository.findByPhone(phone);
-       if(peopleManages.size()==1)
-       {
-           String pwd=peopleManages.get(0).getPassword();
-           if(pwd.equals(oldpassword))
-           {
-               peopleManages.get(0).setPassword(newpassword);
-               peopleManageRepository.save(peopleManages.get(0));
-               result="success";
-           }
-       }
-       return result;
-    }
     @GetMapping("/getlist")
     public String getlist()
     {
-        List<PeopleManage> list=peopleManageRepository.findByAuthority("用户");
+        List<PeopleManage> list=peopleManageRepository.findByAuthority("管理员");
         String json= JSON.toJSONString(list);
         // String a="[{\"id\":\"1\",\"name\":\"管理员3\",\"password\":\"123\",\"department\":\"南京理工大学\",\"phone\":\"1216679910\",\"company\":\"南理工\",\"authority\":\"管理员\"}]";
         return json;
@@ -64,7 +43,7 @@ public class UserController {
             String company=request.getParameter("company");
             String department=request.getParameter("department");
             String phone=request.getParameter("phone");
-            String authority="用户";
+            String authority="管理员";
             PeopleManage user=new PeopleManage();
             user.setName(name);
             user.setPassword(password);
@@ -82,7 +61,7 @@ public class UserController {
             String company=request.getParameter("company");
             String department=request.getParameter("department");
             String phone=request.getParameter("phone");
-            String authority="用户";
+            String authority="管理员";
             PeopleManage user=new PeopleManage();
             user.setId(Integer.parseInt(id));
             user.setName(name);

@@ -52,10 +52,10 @@
     <div class="page-content">
         <div class="page-header">
             <h1>
-                人员管理
+                柜子管理
                 <small>
                     <i class="ace-icon fa fa-angle-double-right"></i>
-                    管理员管理
+                    柜子分配
                 </small>
             </h1>
         </div><!-- /.page-header -->
@@ -64,7 +64,7 @@
             <div class="col-xs-12">
 
 
-
+                <input type="hidden" th:value="${id}" id="id"/>
                 <table id="grid-table"></table>
 
                 <div id="grid-pager"></div>
@@ -113,7 +113,7 @@
 
 <!-- inline scripts related to this page -->
 <script type="text/javascript">
-
+    var id=$("#id").val();
     var grid_data =
         [
             { UserID: "2", Username: "Laptop", Pwd: "Long text ", Email: "Yes", Gender: "InTime", Authority: "2007-12-03" },
@@ -181,14 +181,14 @@
                     ]
                 });
             },
-            url:"/supermanage/getlist",
+            url:"/rfid/getlist?id="+id,
             // url: '/User/GetList',
             //  data: grid_data,
-            caption: "人员列表",
+            caption: "柜子列表",
             type: "post",
             datatype: "json",
             height: 300,
-            colNames: [' ', 'ID', '姓名', '密码','公司','部门','电话', '权限'],
+            colNames: [' ', 'ID', 'MAC', '箱格号','RFID'],
             colModel: [
                 {
                     name: 'myac', index: '', width: 80, fixed: true, sortable: false, resize: false,
@@ -199,7 +199,7 @@
 
                         delOptions: { recreateForm: true, beforeShowForm: beforeDeleteCallback },
                         editformbutton:true, editOptions:{recreateForm: true, beforeShowForm:beforeEditCallback,closeAfterEdit: true , afterComplete: function () {
-                            var url = "/supermanage/getlist";
+                            var url = "/rfid/getlist?id="+id;
                             //var url = "~/User/GetList2" ;
                             $("#grid-table").jqGrid("setGridParam", { datatype: 'json', page: 1, loadonce: true, url: url }).trigger("reloadGrid");
                         }}
@@ -207,24 +207,14 @@
                 },
                 { name: 'id', index: 'id', width: 60, sortable: true, editable: true, key: true},
                 {
-                    name: 'name', index: 'name', width: 60, sortable: true, editable: true, editrules: {
+                    name: 'mac', index: 'mac', width: 60, sortable: true, editable: true, editrules: {
                     required: true,
                     edithidden: true,
 
                 }
                 },
-                {
-                    name: 'password', index: 'password', width: 60, sortable: true, editable: true, edittype: "password",
-                    editoptions: { size: "20", maxlength: "30" }, editrules: {
-                    required: true,
-                    edithidden: true,
-
-                }
-                },
-                { name: 'company', index: 'company', width: 60, sortable: true, editable: true },
-                { name: 'department', index: 'department', width: 60, sortable: true, editable: true },
-                { name: 'phone', index: 'phone', width: 60, sortable: true, editable: true },
-                { name: 'authority', index: 'authority', width: 60, sortable: true, editable: false ,search:false},
+                { name: 'location', index: 'location', width: 60, sortable: true, editable: true },
+                { name: 'rfid', index: 'rfid', width: 60, sortable: true, editable: true },
             ],
 
             viewrecords: true,
@@ -252,7 +242,7 @@
             },
 
             //editurl: '/User/ManagerEdit',
-            editurl: "/supermanage/edit",
+            editurl: "/rfid/edit",
 
             //,autowidth: true,
 
@@ -323,7 +313,7 @@
                     style_edit_form(form);
                 },
                 closeAfterEdit: true,
-                url: "/supermanage/edit",
+                url: "/rfid/edit",
                 // url: '/User/ManagerEdit',
                 mtype: 'POST',
                 closeAfterSubmit: true,
@@ -349,7 +339,7 @@
                     style_edit_form(form);
                 },
                 afterComplete: function () {
-                    var url ="/supermanage/getlist";
+                    var url ="/rfid/getlist?id="+id;
                     $("#grid-table").jqGrid("setGridParam", { datatype: 'json', page: 1, loadonce: true, url: url }).trigger("reloadGrid");
                 }
             },
@@ -369,36 +359,8 @@
                 // closeAfterDel: true,
                 closeAfterEdit: true,
                 //url: '/User/ManagerEdit',
-                url: "/supermanage/edit",
+                url: "/rfid/edit",
                 mtype: 'POST',
-                //  data:  {Userid:celldata},
-                //afterSubmit: function (xhr, postdata) {
-                //    //var selectedRowIds = $("#grid-table").jqGrid("getGridParam", "selarrrow");
-                //    //var len = selectedRowIds.length;
-                //    //var UserId =new Array();
-                //    //for (var i = 0; i <len; i++) {
-                //    //    UserId[i]=datas[selectedRowIds[i]-1].UserId;
-                //    //}
-                //    var rowid = $("#grid-table").jqGrid('getGridParam', 'selrow');
-                //    var celldata=$("#grid-table").jqGrid('getCell',rowid,'UserID');
-                //    //post userId组到后台，让后台删除（PS：这里是我的逻辑实现，我的后台是对userId进行删除的）
-                //    $.ajax({
-                //        type: "post",
-                //        url: "~/User/Delete",
-                //        data: {UserID:celldata},
-                //        dataType: "json",
-                //        success: function (data) {
-                //            //判断后台是否删除成功
-                //            //如果成功则调用jqGrid的delRowData方法逐个删除行id
-                //            if(data.success==1){
-                //                for (var i = 0; i < len; i++) {
-                //                    $("#grid-pager").jqGrid("delRowData", selectedRowIds[0],{reloadAfterSubmit:false});
-                //                }
-                //            }
-                //        }
-                //    });
-
-                //},
                 onClick: function (e) {
                     alert(1);
                 }
@@ -406,7 +368,7 @@
             {
                 //search form
                 // url: '/User/ManagerEdit',
-                url: "/supermanage/edit",
+                url: "/rfid/edit",
                 mtype: 'POST',
                 recreateForm: true,
                 afterShowSearch: function (e) {
@@ -434,62 +396,13 @@
                 }
             }
         )
-        //.jqGrid('navButtonAdd',pager_selector,{              //原为).jqgrid
-        //        buttonicon:'icon-globe purple',
-        //        caption:'',
-        //        position:'last',
-        //        title:'查看历史记录',
-        //        onClickButton:function(){
-        //            //获得某行id
-        //            var gr = jQuery("#grid-table").jqGrid('getGridParam', 'selrow');
-        //            //获得某行数据
-        //            var grr = jQuery("#grid-table").jqGrid('getRowData',gr);
-        //            if (gr != null) {
-        //                var diag = new Dialog();
-        //                diag.Width = 600;
-        //                diag.Height = 300;
-        //                diag.Title = "历史数据展示";
-        //                diag.URL = "~/left.html?id="+gr;
-        //                diag.OKEvent = function(){diag.close();};//点击确定后调用的方法
-        //                diag.show();
-
-        //            }
-        //            else alert("Please Select Row");
-
-        //        }
-        //    }).jqGrid('navButtonAdd',pager_selector,{
-        //        buttonicon:'icon-eye-open',
-        //        caption:'',
-        //        position:'last',
-        //        title:'表单验证',
-        //        onClickButton:function(){
-        //            debugger;
-        //            //获得某行id
-        //            var gr = jQuery("#grid-table").jqGrid('getGridParam', 'selrow');
-        //            //获得某行数据
-        //            var grr = jQuery("#grid-table").jqGrid('getRowData',gr);
-        //            if (gr != null) {
-        //                var diag = new Dialog();
-        //                diag.Width = 600;
-        //                diag.Height = 300;
-        //                diag.Title = "表单验证";
-        //                diag.URL = "~/form.html";
-        //                diag.OKEvent = function(){diag.close();};//点击确定后调用的方法
-        //                diag.show();
-
-        //            }
-        //            else alert("Please Select Row");
-
-        //        }
-        //    })
 
         function style_edit_form(form) {
             //enable datepicker on "sdate" field and switches for "stock" field
             form.find('input[name=sdate]').datepicker({ format: 'yyyy-mm-dd', autoclose: true })
 
             form.find('input[name=stock]').addClass('ace ace-switch ace-switch-5').after('<span class="lbl"></span>');
-            //don't wrap inside a label element, the checkbox value won't be submitted (POST'ed)
-            //.addClass('ace ace-switch ace-switch-5').wrap('<label class="inline" />').after('<span class="lbl"></span>');
+
 
 
             //update buttons classes
@@ -608,6 +521,10 @@
             $('.ui-jqdialog').remove();
         });
     });
+    function RFIDConfiguration(id)
+    {
+        window.location.href="/home/login";
+    }
 </script>
 
 

@@ -181,7 +181,7 @@
                     ]
                 });
             },
-            url:"/supermanage/getlist",
+            url:"/user/getlist",
             // url: '/User/GetList',
             //  data: grid_data,
             caption: "人员列表",
@@ -199,7 +199,7 @@
 
                         delOptions: { recreateForm: true, beforeShowForm: beforeDeleteCallback },
                         editformbutton:true, editOptions:{recreateForm: true, beforeShowForm:beforeEditCallback,closeAfterEdit: true , afterComplete: function () {
-                            var url = "/supermanage/getlist";
+                            var url = "/user/getlist";
                             //var url = "~/User/GetList2" ;
                             $("#grid-table").jqGrid("setGridParam", { datatype: 'json', page: 1, loadonce: true, url: url }).trigger("reloadGrid");
                         }}
@@ -252,7 +252,7 @@
             },
 
             //editurl: '/User/ManagerEdit',
-            editurl: "/supermanage/edit",
+            editurl: "/user/edit",
 
             //,autowidth: true,
 
@@ -323,7 +323,7 @@
                     style_edit_form(form);
                 },
                 closeAfterEdit: true,
-                url: "/supermanage/edit",
+                url: "/user/edit",
                 // url: '/User/ManagerEdit',
                 mtype: 'POST',
                 closeAfterSubmit: true,
@@ -349,7 +349,7 @@
                     style_edit_form(form);
                 },
                 afterComplete: function () {
-                    var url ="/supermanage/getlist";
+                    var url ="/user/getlist";
                     $("#grid-table").jqGrid("setGridParam", { datatype: 'json', page: 1, loadonce: true, url: url }).trigger("reloadGrid");
                 }
             },
@@ -369,7 +369,7 @@
                 // closeAfterDel: true,
                 closeAfterEdit: true,
                 //url: '/User/ManagerEdit',
-                url: "/supermanage/edit",
+                url: "/user/edit",
                 mtype: 'POST',
                 //  data:  {Userid:celldata},
                 //afterSubmit: function (xhr, postdata) {
@@ -406,7 +406,7 @@
             {
                 //search form
                 // url: '/User/ManagerEdit',
-                url: "/supermanage/edit",
+                url: "/user/edit",
                 mtype: 'POST',
                 recreateForm: true,
                 afterShowSearch: function (e) {

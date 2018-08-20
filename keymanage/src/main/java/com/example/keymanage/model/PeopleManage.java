@@ -15,21 +15,23 @@ import javax.persistence.Id;
  */
 @Entity
 public class PeopleManage {
+    @Id
     @GeneratedValue
-    private String id;
+    private Integer id;
     private String name;
     private String password;
     private String company;
     private String department;
     private String authority;
-    @Id
     private String phone;
+    private String openid;
+    private String iscomfirm;
 
-    public String getId() {
+    public Integer getId() {
         return id;
     }
 
-    public void setId(String id) {
+    public void setId(Integer id) {
         this.id = id;
     }
 
@@ -79,5 +81,21 @@ public class PeopleManage {
 
     public void setPassword(String password) {
         this.password = password;
+    }
+
+    public String getOpenid() {
+        return openid;
+    }
+
+    public void setOpenid(String openid) {
+        this.openid = openid;
+    }
+
+    public String getIscomfirm() {
+        return iscomfirm;
+    }
+
+    public void setIscomfirm(String iscomfirm) {
+        this.iscomfirm = iscomfirm;
     }
 }

@@ -27,17 +27,10 @@ public class LoginController {
     {
         String phone=request.getParameter("username");
         String pwd=request.getParameter("pwd");
-        List<PeopleManage> peopleList=peopleManageRepository.findByPhone(phone);
-        if(peopleList.size()==1)
+        List<PeopleManage> peopleManageList=peopleManageRepository.findByPhoneAndPasswordAndIscomfirm(phone,pwd,"1");
+        if(peopleManageList.size()==1)
         {
-            String pwdFromDatabase=peopleList.get(0).getPassword();
-            if(pwd.equals(pwdFromDatabase))
-            {
-                return "ok";
-            }
-            else{
-                return "error";
-            }
+           return "ok";
         }
         else {
             return "error";
