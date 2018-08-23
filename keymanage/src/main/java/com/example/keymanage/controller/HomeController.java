@@ -1,6 +1,7 @@
 package com.example.keymanage.controller;
 
 
+
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -57,9 +58,14 @@ public class HomeController {
     {
         return "UserManage/manager.html";
     }
+    @GetMapping(value = "/userapply")
+    public String userapply(){return "/UserManage/userapply.html";}
+    @GetMapping(value="/cabinetforgoods")
+    public String cabinetforgoods() { return "/Goods/cabinetforgoods.html"; }
     @GetMapping(value="/goods")
-    public String goods()
-    {
+    public String goods(Model model, @RequestParam(value = "id", required = false, defaultValue = "") String id) {
+        String a=id;
+        model.addAttribute("id", id);
         return "/Goods/goods.html";
     }
 }

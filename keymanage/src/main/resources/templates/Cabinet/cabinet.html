@@ -188,7 +188,7 @@
             type: "post",
             datatype: "json",
             height: 300,
-            colNames: [' ', 'ID', 'MAC', '公司','柜子名称','地点', '柜门数量',"RFID"],
+            colNames: [' ', 'ID', 'MAC', '公司','柜子名称','地点','柜门数量',"RFID"],
             colModel: [
                 {
                     name: 'myac', index: '', width: 80, fixed: true, sortable: false, resize: false,
@@ -213,10 +213,17 @@
                     key: true
                 }
                 },
-                { name: 'company', index: 'company', width: 60, sortable: true, editable: true },
+                { name: 'company', index: 'company', width: 60, sortable: true, editable: true ,editrules: {
+                    required: true,
+                    edithidden: true,
+                    key: true
+                }},
                 { name: 'name', index: 'name', width: 60, sortable: true, editable: true },
                 { name: 'location', index: 'location', width: 60, sortable: true, editable: true },
-                { name: 'numofdoor', index: 'numofdoor', width: 60, sortable: true, editable:true  ,search:false},
+                { name: 'numofdoor', index: 'numofdoor', width: 60, sortable: true, editable:true ,search:false,editrules: {
+                    required:true,
+                    edithidden: true,
+                }},
                 {
                     name: 'myac', index: '', width: 50, fixed: true, sortable: false, resize: false,
                     formatter: function (cellvalue, options, rowObject) {

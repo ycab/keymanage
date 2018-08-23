@@ -13,4 +13,5 @@ public interface PeopleManageRepository extends JpaRepository<PeopleManage,Integ
     @Query(value = "select * from people_manage",nativeQuery = true)
     public List<PeopleManage> selectall();
     public List<PeopleManage> findByPhone(String phone);
+    public List<PeopleManage> findByAuthorityAndIscomfirm(String authority,String iscomfirm);
 }

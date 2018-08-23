@@ -191,11 +191,11 @@
             colNames: [' ', 'ID', 'MAC', '箱格号','RFID'],
             colModel: [
                 {
-                    name: 'myac', index: '', width: 80, fixed: true, sortable: false, resize: false,
+                    name: 'myac', index: '', width: 40, fixed: true, sortable: false, resize: false,
                     formatter: 'actions',
                     formatoptions: {
                         keys: true,
-                        //delbutton: false,//disable delete button
+                        delbutton: false,//disable delete button
 
                         delOptions: { recreateForm: true, beforeShowForm: beforeDeleteCallback },
                         editformbutton:true, editOptions:{recreateForm: true, beforeShowForm:beforeEditCallback,closeAfterEdit: true , afterComplete: function () {
@@ -207,13 +207,9 @@
                 },
                 { name: 'id', index: 'id', width: 60, sortable: true, editable: true, key: true},
                 {
-                    name: 'mac', index: 'mac', width: 60, sortable: true, editable: true, editrules: {
-                    required: true,
-                    edithidden: true,
-
-                }
+                    name: 'mac', index: 'mac', width: 60, sortable: true, editable: false,
                 },
-                { name: 'location', index: 'location', width: 60, sortable: true, editable: true },
+                { name: 'location', index: 'location', width: 60, sortable: true, editable: false },
                 { name: 'rfid', index: 'rfid', width: 60, sortable: true, editable: true },
             ],
 
@@ -291,9 +287,9 @@
             { 	//navbar options
                 edit: true,
                 editicon: 'ace-icon fa fa-pencil blue',
-                add: true,
+                add: false,
                 addicon: 'ace-icon fa fa-plus-circle purple',
-                del: true,
+                del: false,
                 delicon: 'ace-icon fa fa-trash-o red',
                 search: true,
                 searchicon: 'ace-icon fa fa-search orange',

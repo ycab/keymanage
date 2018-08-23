@@ -461,7 +461,7 @@
 								<b class="arrow"></b>
 							</li>
 							<li id="user2" class="">
-								<a href="#" data-iframe="user2" onclick="changePage(this)">
+								<a href="#" data-iframe="userapply" onclick="changePage(this)">
 									<i class="menu-icon fa fa-caret-right"></i>
 									人员审批
 								</a>
@@ -473,7 +473,7 @@
 
 					<!--物品管理-->
 					<li class="">
-						<a href="#" class="dropdown-toggle">
+						<a href="#" data-iframe="goodsmanage" onclick="changePage(this)"class="dropdown-toggle">
 							<i class="menu-icon fa fa-list"></i>
 							<span class="menu-text"> 物品管理 </span>
 						</a>
@@ -658,11 +658,11 @@
                     test.src ="/home/user";
                 } else if (itemName == "manager") {
                     test.src = "/home/manager";
-                } else if (itemName == "editQZ") {
-                    test.src = '@Url.Content("~/Rank/RankEdit")';
+                } else if (itemName == "userapply") {
+                    test.src = "/home/userapply";
                 }
-                else if (itemName == "robot") {
-                    test.src = '@Url.Content("~/Rank/GetRankByRobot")';
+                else if (itemName == "goodsmanage") {
+                    test.src = "/home/cabinetforgoods";
                 } else if (itemName == "3D") {
                     test.src = '@Url.Content("~/Rank/GetRankBy3D")';
                 } else if (itemName == "CNC") {

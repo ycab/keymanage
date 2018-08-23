@@ -60,7 +60,7 @@ public class CabinetController {
             {
                 GoodsManage goodsManage=new GoodsManage();
                 goodsManage.setMac(mac);
-                goodsManage.setLocation(String.valueOf(i));
+                goodsManage.setLocation(i+1);
                 goodsManageRepository.save(goodsManage);
             }
 
@@ -72,8 +72,6 @@ public class CabinetController {
             String company=request.getParameter("company");
             String name=request.getParameter("name");
             String location=request.getParameter("location");
-            String numofdoor=request.getParameter("numofdoor");
-
             Cabinet cabinetfromdatabase=cabinetRepository.findById(Integer.parseInt(id)).orElse(null);
             String  macfromdatabase=cabinetfromdatabase.getMac();
             Cabinet cabinet=new Cabinet();
@@ -82,10 +80,8 @@ public class CabinetController {
             cabinet.setCompany(company);
             cabinet.setName(name);
             cabinet.setLocation(location);
-            cabinet.setNumofdoor(Integer.parseInt(numofdoor));
+            cabinet.setNumofdoor(cabinetfromdatabase.getNumofdoor());
             cabinetRepository.save(cabinet);
-            int b=0;
-            b++;
             if(macfromdatabase.equals(mac))
             {
 

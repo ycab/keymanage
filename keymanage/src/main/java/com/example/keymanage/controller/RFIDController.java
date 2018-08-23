@@ -34,7 +34,7 @@ public class RFIDController {
         String id=request.getParameter("id");
         Cabinet cabinets=cabinetRepository.findById(Integer.parseInt(id)).orElse(null);
         String mac=cabinets.getMac();
-        List<GoodsManage> list= goodsManageRepository.findByMac(mac);
+        List<GoodsManage> list= goodsManageRepository.findByMacOrderByLocation(mac);
         String json= JSON.toJSONString(list);
         return json;
 
@@ -45,34 +45,19 @@ public class RFIDController {
         String oper=request.getParameter("oper");
         if(oper.equals("add"))
         {
-            String id=request.getParameter("id");
-            String location=request.getParameter("location");
-            String rfid=request.getParameter("rfid");
-            GoodsManage goodsManage=new GoodsManage();
-            goodsManage.setLocation(location);
-            goodsManage.setRfid(rfid);
-            goodsManageRepository.save(goodsManage);
+
         }
         else if(oper.equals("edit"))
         {
             String id=request.getParameter("id");
-            String location=request.getParameter("location");
             String rfid=request.getParameter("rfid");
             GoodsManage goodsManage=goodsManageRepository.findById(Integer.parseInt(id)).orElse(null);
-            goodsManage.setLocation(location);
             goodsManage.setRfid(rfid);
             goodsManageRepository.save(goodsManage);
         }
         else if(oper.equals("del"))
         {
-            String[] idArray=null;
-            idArray=request.getParameter("id").split(",");
-            for(int i=0;i<idArray.length;i++)
-            {
-                goodsManageRepository.deleteById(Integer.parseInt(idArray[i]));
-            }
-            //int id=Integer.parseInt(request.getParameter("id"));
-            //peopleManageRepository.deleteById(id);
+
         }
         return "ok";
     }

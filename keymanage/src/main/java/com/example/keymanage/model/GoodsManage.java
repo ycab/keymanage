@@ -19,7 +19,7 @@ public class GoodsManage {
     private Integer id;
     private String name;         //物品名称
     private String mac;           //物品mac
-    private String location;     //箱格位置
+    private Integer location;     //箱格位置
     private String needApproved;//是否需要审批
     private String rfid;         //rfid
     private String userName;     //当前使用者姓名
@@ -51,11 +51,11 @@ public class GoodsManage {
         this.mac = mac;
     }
 
-    public String getLocation() {
+    public Integer getLocation() {
         return location;
     }
 
-    public void setLocation(String location) {
+    public void setLocation(Integer location) {
         this.location = location;
     }
 

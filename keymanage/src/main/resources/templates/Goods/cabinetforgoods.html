@@ -64,7 +64,7 @@
             <div class="col-xs-12">
 
 
-                <input type="hidden" th:value="${id}" id="id"/>
+
                 <table id="grid-table"></table>
 
                 <div id="grid-pager"></div>
@@ -113,7 +113,7 @@
 
 <!-- inline scripts related to this page -->
 <script type="text/javascript">
-    var id=$("#id").val();
+
     var grid_data =
         [
             { UserID: "2", Username: "Laptop", Pwd: "Long text ", Email: "Yes", Gender: "InTime", Authority: "2007-12-03" },
@@ -181,14 +181,14 @@
                     ]
                 });
             },
-            url:"/goods/goods/getlist?id="+id,
+            url:"/goods/cabinetforgoods/getlist",
             // url: '/User/GetList',
             //  data: grid_data,
             caption: "柜子列表",
             type: "post",
             datatype: "json",
             height: 300,
-            colNames: [' ', 'ID', 'MAC', '公司','物品名称', '是否需要审批'],
+            colNames: [' ', 'ID', 'MAC', '公司','柜子名称','地点', '柜门数量',"物品"],
             colModel: [
                 {
                     name: 'myac', index: '', width: 80, fixed: true, sortable: false, resize: false,
@@ -199,7 +199,7 @@
 
                         delOptions: { recreateForm: true, beforeShowForm: beforeDeleteCallback },
                         editformbutton:true, editOptions:{recreateForm: true, beforeShowForm:beforeEditCallback,closeAfterEdit: true , afterComplete: function () {
-                            var url = "/goods/goods/getlist?id="+id;
+                            var url = "/goods/cabinetforgoods/getlist";
                             //var url = "~/User/GetList2" ;
                             $("#grid-table").jqGrid("setGridParam", { datatype: 'json', page: 1, loadonce: true, url: url }).trigger("reloadGrid");
                         }}
@@ -215,7 +215,14 @@
                 },
                 { name: 'company', index: 'company', width: 60, sortable: true, editable: true },
                 { name: 'name', index: 'name', width: 60, sortable: true, editable: true },
-                { name: 'needApproved', index: 'needApproved', width: 60, sortable: true, editable: true },
+                { name: 'location', index: 'location', width: 60, sortable: true, editable: true },
+                { name: 'numofdoor', index: 'numofdoor', width: 40, sortable: true, editable:true  ,search:false},
+                {
+                    name: 'myac', index: '', width: 40, fixed: true, sortable: false, resize: false,
+                    formatter: function (cellvalue, options, rowObject) {
+                        return " <a  role=\"button\" class=\"blue\"  onclick=\"GoodsConfiguration(" + rowObject.id + ")\">" + "配置" + "</a>";
+                    }
+                },
             ],
 
             viewrecords: true,
@@ -243,7 +250,7 @@
             },
 
             //editurl: '/User/ManagerEdit',
-            editurl: "/goods/goods/edit",
+            editurl: "/goods/cabinetforgoods/edit",
 
             //,autowidth: true,
 
@@ -314,7 +321,7 @@
                     style_edit_form(form);
                 },
                 closeAfterEdit: true,
-                url: "/goods/goods/edit",
+                url: "/goods/cabinetforgoods/edit",
                 // url: '/User/ManagerEdit',
                 mtype: 'POST',
                 closeAfterSubmit: true,
@@ -340,7 +347,7 @@
                     style_edit_form(form);
                 },
                 afterComplete: function () {
-                    var url ="/goods/goods/getlist?id="+id;
+                    var url ="/goods/cabinetforgoods/getlist";
                     $("#grid-table").jqGrid("setGridParam", { datatype: 'json', page: 1, loadonce: true, url: url }).trigger("reloadGrid");
                 }
             },
@@ -360,7 +367,7 @@
                 // closeAfterDel: true,
                 closeAfterEdit: true,
                 //url: '/User/ManagerEdit',
-                url: "/goods/goods/edit",
+                url: "/goods/cabinetforgoods/edit",
                 mtype: 'POST',
                 onClick: function (e) {
                     alert(1);
@@ -369,7 +376,7 @@
             {
                 //search form
                 // url: '/User/ManagerEdit',
-                url: "/goods/goods/edit",
+                url: "/goods/cabinetforgoods/edit",
                 mtype: 'POST',
                 recreateForm: true,
                 afterShowSearch: function (e) {
@@ -524,7 +531,7 @@
     });
     function GoodsConfiguration(id)
     {
-        window.location.href="/home/rfid?id="+id;
+        window.location.href="/home/goods?id="+id;
     }
 </script>
 

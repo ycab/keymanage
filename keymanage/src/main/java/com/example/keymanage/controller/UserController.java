@@ -4,6 +4,7 @@ import com.alibaba.fastjson.JSON;
 import com.example.keymanage.dao.PeopleManageRepository;
 import com.example.keymanage.model.PeopleManage;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.client.OkHttp3ClientHttpRequestFactory;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -48,9 +49,8 @@ public class UserController {
     @GetMapping("/getlist")
     public String getlist()
     {
-        List<PeopleManage> list=peopleManageRepository.findByAuthority("用户");
+        List<PeopleManage> list=peopleManageRepository.findByAuthorityAndIscomfirm("用户","1");
         String json= JSON.toJSONString(list);
-        // String a="[{\"id\":\"1\",\"name\":\"管理员3\",\"password\":\"123\",\"department\":\"南京理工大学\",\"phone\":\"1216679910\",\"company\":\"南理工\",\"authority\":\"管理员\"}]";
         return json;
     }
     @PostMapping("/edit")
@@ -106,4 +106,29 @@ public class UserController {
         }
         return "ok";
     }
+    @PostMapping("/pass")
+    public String pass(HttpServletRequest request)
+    {
+        String id=request.getParameter("id");
+        PeopleManage peopleManage=peopleManageRepository.findById(Integer.parseInt(id)).orElse(null);
+        peopleManage.setIscomfirm("1");
+        peopleManageRepository.save(peopleManage);
+        return "ok";
+    }
+    @PostMapping("/notpass")
+    public String notpass(HttpServletRequest request)
+    {
+        String id=request.getParameter("id");
+        peopleManageRepository.deleteById(Integer.parseInt(id));
+        return "ok";
+    }
+    @GetMapping("/getapplylist")
+    public String getapplylist(HttpServletRequest request)
+    {
+        String id=request.getParameter("id");
+        List<PeopleManage> list=peopleManageRepository.findByAuthorityAndIscomfirm("用户","0");
+        String json= JSON.toJSONString(list);
+        return json;
+    }
+
 }

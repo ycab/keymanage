@@ -8,7 +8,7 @@ import java.util.List;
 
 public interface GoodsManageRepository extends JpaRepository<GoodsManage,Integer>{
       public List<GoodsManage> findByMac(String mac);
-
+      public List<GoodsManage> findByMacOrderByLocation(String mac);
 
 
 }
