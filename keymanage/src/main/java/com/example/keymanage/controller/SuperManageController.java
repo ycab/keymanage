@@ -52,6 +52,7 @@ public class SuperManageController {
             user.setDepartment(department);
             user.setPhone(phone);
             user.setAuthority(authority);
+            user.setIscomfirm("1");
             peopleManageRepository.save(user);
         }
         else if(oper.equals("edit"))
@@ -63,8 +64,7 @@ public class SuperManageController {
             String department=request.getParameter("department");
             String phone=request.getParameter("phone");
             String authority="超级管理员";
-            PeopleManage user=new PeopleManage();
-            user.setId(Integer.parseInt(id));
+            PeopleManage user=peopleManageRepository.findById(Integer.parseInt(id)).orElse(null);
             user.setName(name);
             user.setPassword(password);
             user.setCompany(company);

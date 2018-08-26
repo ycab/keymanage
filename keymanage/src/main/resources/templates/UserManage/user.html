@@ -55,7 +55,7 @@
                 人员管理
                 <small>
                     <i class="ace-icon fa fa-angle-double-right"></i>
-                    管理员管理
+                    用户管理
                 </small>
             </h1>
         </div><!-- /.page-header -->
@@ -184,7 +184,7 @@
             url:"/user/getlist",
             // url: '/User/GetList',
             //  data: grid_data,
-            caption: "人员列表",
+            caption: "用户列表",
             type: "post",
             datatype: "json",
             height: 300,
@@ -221,7 +221,7 @@
 
                 }
                 },
-                { name: 'company', index: 'company', width: 60, sortable: true, editable: true },
+                { name: 'company', index: 'company', width: 60, sortable: true, editable: false },
                 { name: 'department', index: 'department', width: 60, sortable: true, editable: true },
                 { name: 'phone', index: 'phone', width: 60, sortable: true, editable: true },
                 { name: 'authority', index: 'authority', width: 60, sortable: true, editable: false ,search:false},
@@ -301,7 +301,7 @@
             { 	//navbar options
                 edit: true,
                 editicon: 'ace-icon fa fa-pencil blue',
-                add: true,
+                add: false,
                 addicon: 'ace-icon fa fa-plus-circle purple',
                 del: true,
                 delicon: 'ace-icon fa fa-trash-o red',

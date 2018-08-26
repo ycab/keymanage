@@ -11,6 +11,8 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpSession;
+import java.awt.*;
 import java.util.List;
 
 /**
@@ -47,23 +49,24 @@ public class UserController {
        return result;
     }
     @GetMapping("/getlist")
-    public String getlist()
+    public String getlist(HttpSession session)
     {
-        List<PeopleManage> list=peopleManageRepository.findByAuthorityAndIscomfirm("用户","1");
+        String company=session.getAttribute("company").toString();
+        List<PeopleManage> list=peopleManageRepository.findByCompanyAndAuthorityAndIscomfirm(company,"用户","1");
         String json= JSON.toJSONString(list);
         return json;
     }
     @PostMapping("/edit")
-    public String edit(HttpServletRequest request )
+    public String edit(HttpServletRequest request,HttpSession session)
     {
         String oper=request.getParameter("oper");
         if(oper.equals("add"))
         {
             String name=request.getParameter("name");
             String password=request.getParameter("password");
-            String company=request.getParameter("company");
             String department=request.getParameter("department");
             String phone=request.getParameter("phone");
+            String company=session.getAttribute("company").toString();
             String authority="用户";
             PeopleManage user=new PeopleManage();
             user.setName(name);
@@ -79,15 +82,12 @@ public class UserController {
             String id=request.getParameter("id");
             String name=request.getParameter("name");
             String password=request.getParameter("password");
-            String company=request.getParameter("company");
             String department=request.getParameter("department");
             String phone=request.getParameter("phone");
             String authority="用户";
-            PeopleManage user=new PeopleManage();
-            user.setId(Integer.parseInt(id));
+            PeopleManage user=peopleManageRepository.findById(Integer.parseInt(id)).orElse(null);
             user.setName(name);
             user.setPassword(password);
-            user.setCompany(company);
             user.setDepartment(department);
             user.setPhone(phone);
             user.setAuthority(authority);
@@ -123,10 +123,11 @@ public class UserController {
         return "ok";
     }
     @GetMapping("/getapplylist")
-    public String getapplylist(HttpServletRequest request)
+    public String getapplylist(HttpServletRequest request,HttpSession session)
     {
         String id=request.getParameter("id");
-        List<PeopleManage> list=peopleManageRepository.findByAuthorityAndIscomfirm("用户","0");
+        String company=session.getAttribute("company").toString();
+        List<PeopleManage> list=peopleManageRepository.findByCompanyAndAuthorityAndIscomfirm(company,"用户","0");
         String json= JSON.toJSONString(list);
         return json;
     }

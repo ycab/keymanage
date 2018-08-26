@@ -14,4 +14,6 @@ public interface PeopleManageRepository extends JpaRepository<PeopleManage,Integ
     public List<PeopleManage> selectall();
     public List<PeopleManage> findByPhone(String phone);
     public List<PeopleManage> findByAuthorityAndIscomfirm(String authority,String iscomfirm);
+    public List<PeopleManage> findByCompanyAndAuthority(String company,String authority);
+    public List<PeopleManage> findByCompanyAndAuthorityAndIscomfirm(String company,String authority,String iscomfirm);
 }

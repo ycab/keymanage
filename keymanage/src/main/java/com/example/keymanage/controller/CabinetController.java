@@ -15,6 +15,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpSession;
 import java.util.List;
 
 /**
@@ -32,8 +33,9 @@ public class CabinetController {
     @Autowired
     private GoodsManageRepository goodsManageRepository;
     @GetMapping("/getlist")
-    public String getlist()
+    public String getlist(HttpSession session)
     {
+        String phone=session.getAttribute("phone").toString();
         List<Cabinet> list=cabinetRepository.findAll();
         String json= JSON.toJSONString(list);
         return json;
@@ -51,7 +53,7 @@ public class CabinetController {
             String numofdoor=request.getParameter("numofdoor");
             Cabinet cabinet=new Cabinet();
             cabinet.setMac(mac);
-            //cabinet.setCompany(company);
+            cabinet.setCompany(company);
             cabinet.setName(name);
             cabinet.setLocation(location);
             cabinet.setNumofdoor(Integer.parseInt(numofdoor));

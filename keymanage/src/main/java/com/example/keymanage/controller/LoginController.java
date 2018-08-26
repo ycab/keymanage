@@ -3,11 +3,13 @@ package com.example.keymanage.controller;
 import com.example.keymanage.dao.PeopleManageRepository;
 import com.example.keymanage.model.PeopleManage;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpSession;
 import java.util.List;
 
 @RestController
@@ -23,13 +25,19 @@ public class LoginController {
      * @date: 2018.8.14$
      */
     @PostMapping(value="/checkinfo")
-    public String Login(HttpServletRequest request )
+    public String Login(HttpServletRequest request, HttpSession session, Model model)
     {
         String phone=request.getParameter("username");
         String pwd=request.getParameter("pwd");
         List<PeopleManage> peopleManageList=peopleManageRepository.findByPhoneAndPasswordAndIscomfirm(phone,pwd,"1");
         if(peopleManageList.size()==1)
         {
+            PeopleManage peopleManage=peopleManageList.get(0);
+            session.setAttribute("phone",phone);
+            session.setAttribute("authority",peopleManage.getAuthority());
+            session.setAttribute("name",peopleManage.getName());
+            session.setAttribute("company",peopleManage.getCompany());
+            model.addAttribute("authority",peopleManage.getAuthority());
            return "ok";
         }
         else {

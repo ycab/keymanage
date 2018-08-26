@@ -8,6 +8,8 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
+import javax.servlet.http.HttpSession;
+
 /**
  * @Description: $
  * @Param: $
@@ -19,8 +21,10 @@ import org.springframework.web.bind.annotation.RequestParam;
 @RequestMapping("/home")
 public class HomeController {
     @GetMapping(value = "/index")
-    public String say()
+    public String say(Model model, HttpSession session)
     {
+        String authority=session.getAttribute("authority").toString();
+        model.addAttribute("authority",authority);
         return "Home/index.html";
     }
     @GetMapping(value = "/login")

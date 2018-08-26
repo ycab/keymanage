@@ -325,9 +325,10 @@
 						<li class="light-blue dropdown-modal">
 							<a data-toggle="dropdown" href="#" class="dropdown-toggle">
 								<img class="nav-user-photo" src="/assets/images/avatars/user.jpg" alt="Jason's Photo" />
+								<input type="hidden" th:value="${authority}" id="authority"/>
 								<span class="user-info">
-									<small>Welcome,</small>
-									Jason
+									<small>欢迎</small>
+									<span id="test"></span>
 								</span>
 
 								<i class="ace-icon fa fa-caret-down"></i>
@@ -406,7 +407,7 @@
 				<ul class="nav nav-list">
 
 					<!--超级管理员分配-->
-					<li>
+					<li id="supermanage">
 						<a href="#" data-iframe="supermanage" onclick="changePage(this)">
 							<i class="menu-icon fa fa-tachometer"></i>
 							<span class="menu-text">超级管理员配置</span>
@@ -414,7 +415,7 @@
 						<b class="arrow"></b>
 					</li>
 					<!--柜子管理-->
-					<li>
+					<li id="cabinet">
 						<a href="#" data-iframe="cabinet" onclick="changePage(this)">
 							<i class="menu-icon fa fa-desktop"></i>
 							<span class="menu-text">柜子管理</span>
@@ -460,7 +461,7 @@
 
 								<b class="arrow"></b>
 							</li>
-							<li id="user2" class="">
+							<li id="userapply" class="">
 								<a href="#" data-iframe="userapply" onclick="changePage(this)">
 									<i class="menu-icon fa fa-caret-right"></i>
 									人员审批
@@ -472,7 +473,7 @@
 					</li>
 
 					<!--物品管理-->
-					<li class="">
+					<li id="goodmanage"class="">
 						<a href="#" data-iframe="goodsmanage" onclick="changePage(this)"class="dropdown-toggle">
 							<i class="menu-icon fa fa-list"></i>
 							<span class="menu-text"> 物品管理 </span>
@@ -481,7 +482,7 @@
 						<b class="arrow"></b>
 					</li>
 					<!--物品审批-->
-					<li class="">
+					<li id="goodapply"class="">
 						<a href="#" class="dropdown-toggle">
 							<i class="menu-icon fa fa-pencil-square-o"></i>
 							<span class="menu-text"> 物品审批 </span>
@@ -490,7 +491,7 @@
 						<b class="arrow"></b>
 					</li>
 					<!--异常通知-->
-					<li class="">
+					<li id="error" class="">
 						<a href="#" class="dropdown-toggle">
 							<i class="menu-icon fa fa-comment-o  bigger-130"></i>
 							<span class="menu-text"> 异常通知</span>
@@ -499,7 +500,7 @@
 						<b class="arrow"></b>
 					</li>
 					<!--记录查询-->
-					<li class="">
+					<li id="record" class="">
 						<a href="#" class="dropdown-toggle">
 							<i class="menu-icon  glyphicon glyphicon-search"></i>
 							<span class="menu-text"> 记录查询</span>
@@ -638,7 +639,45 @@
                 $("#mainframe").height(height);
 
             });
-
+            var authority=$("#authority").val();
+            document.getElementById("test").innerText = authority;
+            document.getElementById("supermanage").style.display = "none";
+            document.getElementById("cabinet").style.display = "none";
+            document.getElementById("peopleManage").style.display = "none";
+            document.getElementById("editpwd").style.display = "none";
+            document.getElementById("managerManage").style.display = "none";
+            document.getElementById("userManage").style.display = "none";
+            document.getElementById("userapply").style.display = "none";
+            document.getElementById("goodmanage").style.display = "none";
+            document.getElementById("goodapply").style.display = "none";
+            document.getElementById("error").style.display = "none";
+            if(authority=="root")
+			{
+                document.getElementById("supermanage").style.display = "inline";
+                document.getElementById("cabinet").style.display = "inline";
+			}
+			else if(authority=="超级管理员")
+			{
+                document.getElementById("peopleManage").style.display = "inline";
+                document.getElementById("editpwd").style.display = "inline";
+                document.getElementById("managerManage").style.display = "inline";
+                document.getElementById("userManage").style.display = "inline";
+                document.getElementById("userapply").style.display = "inline";
+                document.getElementById("goodmanage").style.display = "inline";
+                document.getElementById("goodapply").style.display = "inline";
+                document.getElementById("error").style.display = "inline";
+			}
+            else if(authority=="管理员")
+            {
+                document.getElementById("peopleManage").style.display = "inline";
+                document.getElementById("editpwd").style.display = "inline";
+                document.getElementById("managerManage").style.display = "inline";
+                document.getElementById("userManage").style.display = "inline";
+                document.getElementById("userapply").style.display = "inline";
+                document.getElementById("goodmanage").style.display = "inline";
+                document.getElementById("goodapply").style.display = "inline";
+                document.getElementById("error").style.display = "inline";
+            }
             function changePage(obj) {
 
                 var test = document.getElementById("mainframe");

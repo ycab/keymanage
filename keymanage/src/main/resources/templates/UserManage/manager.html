@@ -199,10 +199,25 @@
 
                         delOptions: { recreateForm: true, beforeShowForm: beforeDeleteCallback },
                         editformbutton:true, editOptions:{recreateForm: true, beforeShowForm:beforeEditCallback,closeAfterEdit: true , afterComplete: function () {
-                            var url = "/manager/getlist";
+              /*              var url = "/manager/getlist";
                             //var url = "~/User/GetList2" ;
-                            $("#grid-table").jqGrid("setGridParam", { datatype: 'json', page: 1, loadonce: true, url: url }).trigger("reloadGrid");
-                        }}
+                            $("#grid-table").jqGrid("setGridParam", { datatype: 'json', page: 1, loadonce: true, url: url }).trigger("reloadGrid");*/
+                        },                afterSubmit: function (xhr, postdata) {
+                            if(xhr.responseText=="phoneExists")
+                            {
+                                alert("修改失败，该号码已存在");
+                                return [true, ""]
+                            }
+                            else if(xhr.responseText=="ok")
+                            {
+                                var ip = $("#grid-table").jqGrid('getGridParam', 'selrow');
+                                jQuery("#grid-table").jqGrid('setRowData', ip, postdata);
+                                return [true, ""]
+                            }
+
+                        },
+
+                        }
                     }
                 },
                 { name: 'id', index: 'id', width: 60, sortable: true, editable: true, key: true},
@@ -221,7 +236,7 @@
 
                 }
                 },
-                { name: 'company', index: 'company', width: 60, sortable: true, editable: true },
+                { name: 'company', index: 'company', width: 60, sortable: true, editable: false },
                 { name: 'department', index: 'department', width: 60, sortable: true, editable: true },
                 { name: 'phone', index: 'phone', width: 60, sortable: true, editable: true },
                 { name: 'authority', index: 'authority', width: 60, sortable: true, editable: false ,search:false},
@@ -328,9 +343,18 @@
                 mtype: 'POST',
                 closeAfterSubmit: true,
                 afterSubmit: function (xhr, postdata) {
-                    var ip = $("#grid-table").jqGrid('getGridParam', 'selrow');
-                    jQuery("#grid-table").jqGrid('setRowData', ip, postdata);
-                    return [true, ""]
+                    if(xhr.responseText=="phoneExists")
+                    {
+                        alert("修改失败，该号码已存在");
+                        return [true, ""]
+                    }
+                    else if(xhr.responseText=="ok")
+                    {
+                        var ip = $("#grid-table").jqGrid('getGridParam', 'selrow');
+                        jQuery("#grid-table").jqGrid('setRowData', ip, postdata);
+                        return [true, ""]
+                    }
+
                 },
                 //closeAfterSubmit: true, closeOnEscape: true
 
@@ -348,9 +372,18 @@
                         .wrapInner('<div class="widget-header" />')
                     style_edit_form(form);
                 },
-                afterComplete: function () {
-                    var url ="/manager/getlist";
-                    $("#grid-table").jqGrid("setGridParam", { datatype: 'json', page: 1, loadonce: true, url: url }).trigger("reloadGrid");
+                afterComplete: function (xhr) {
+                    if(xhr.responseText=="phoneExists")
+                    {
+                        alert("添加失败，该号码已注册");
+                    }
+                    else if(xhr.responseText=="ok")
+                    {
+                        var url ="/manager/getlist";
+                        $("#grid-table").jqGrid("setGridParam", { datatype: 'json', page: 1, loadonce: true, url: url }).trigger("reloadGrid");
+                        $("#refresh_grid-table").trigger('click');
+                    }
+
                 }
             },
             {

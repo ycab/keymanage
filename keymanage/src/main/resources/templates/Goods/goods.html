@@ -188,32 +188,36 @@
             type: "post",
             datatype: "json",
             height: 300,
-            colNames: [' ', 'ID', 'MAC', '公司','物品名称', '是否需要审批'],
+            colNames: [' ', 'ID', '箱格','物品名称', '是否需要审批'],
             colModel: [
                 {
-                    name: 'myac', index: '', width: 80, fixed: true, sortable: false, resize: false,
+                    name: 'myac', index: '', width: 40, fixed: true, sortable: false, resize: false,
                     formatter: 'actions',
                     formatoptions: {
                         keys: true,
-                        //delbutton: false,//disable delete button
+                        delbutton: false,//disable delete button
 
                         delOptions: { recreateForm: true, beforeShowForm: beforeDeleteCallback },
                         editformbutton:true, editOptions:{recreateForm: true, beforeShowForm:beforeEditCallback,closeAfterEdit: true , afterComplete: function () {
-                            var url = "/goods/goods/getlist?id="+id;
+                           // var url = "/goods/goods/getlist?id="+id;
                             //var url = "~/User/GetList2" ;
-                            $("#grid-table").jqGrid("setGridParam", { datatype: 'json', page: 1, loadonce: true, url: url }).trigger("reloadGrid");
-                        }}
+                           // $("#grid-table").jqGrid("setGridParam", { datatype: 'json', pager: pager_selector,loadonce: true, url: url }).trigger("reloadGrid");
+                        },
+                            afterSubmit: function (xhr, postdata) {
+                                var ip = $("#grid-table").jqGrid('getGridParam', 'selrow');
+                                jQuery("#grid-table").jqGrid('setRowData', ip, postdata);
+                                return [true, ""]
+                            },}
                     }
                 },
                 { name: 'id', index: 'id', width: 60, sortable: true, editable: true, },
                 {
-                    name: 'mac', index: 'mac', width: 60, sortable: true, editable: true, editrules: {
+                    name: 'location', index: 'mac', width: 60, sortable: true, editable: true, editrules: {
                     required: true,
                     edithidden: true,
                     key: true
                 }
                 },
-                { name: 'company', index: 'company', width: 60, sortable: true, editable: true },
                 { name: 'name', index: 'name', width: 60, sortable: true, editable: true },
                 { name: 'needApproved', index: 'needApproved', width: 60, sortable: true, editable: true },
             ],
@@ -319,8 +323,9 @@
                 mtype: 'POST',
                 closeAfterSubmit: true,
                 afterSubmit: function (xhr, postdata) {
-                    var ip = $("#grid-table").jqGrid('getGridParam', 'selrow');
-                    jQuery("#grid-table").jqGrid('setRowData', ip, postdata);
+                     alert("物品信息错误");
+/*                    var ip = $("#grid-table").jqGrid('getGridParam', 'selrow');
+                    jQuery("#grid-table").jqGrid('setRowData', ip, postdata);*/
                     return [true, ""]
                 },
                 //closeAfterSubmit: true, closeOnEscape: true
@@ -341,7 +346,7 @@
                 },
                 afterComplete: function () {
                     var url ="/goods/goods/getlist?id="+id;
-                    $("#grid-table").jqGrid("setGridParam", { datatype: 'json', page: 1, loadonce: true, url: url }).trigger("reloadGrid");
+                    $("#grid-table").jqGrid("setGridParam", { datatype: 'json',  loadonce: true, url: url }).trigger("reloadGrid");
                 }
             },
             {
