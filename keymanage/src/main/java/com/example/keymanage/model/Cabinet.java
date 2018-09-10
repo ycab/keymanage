@@ -18,7 +18,7 @@ public class Cabinet {
     private Integer id;
     private String mac;
     private String company;
-    private String name;
+    private String cabinetName;
     private String location;  //柜子地址
     private Integer numofdoor; //箱格数量
 
@@ -46,12 +46,12 @@ public class Cabinet {
         this.company = company;
     }
 
-    public String getName() {
-        return name;
+    public String getCabinetName() {
+        return cabinetName;
     }
 
-    public void setName(String name) {
-        this.name = name;
+    public void setCabinetName(String cabinetName) {
+        this.cabinetName = cabinetName;
     }
 
     public String getLocation() {

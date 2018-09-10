@@ -9,11 +9,11 @@ import java.util.List;
 
 public interface PeopleManageRepository extends JpaRepository<PeopleManage,Integer> {
     public List<PeopleManage> findByAuthority(String authority);
-    public List<PeopleManage> findByPhoneAndPasswordAndIscomfirm(String phone,String password,String iscomfirm);
+    public List<PeopleManage> findByPhoneAndPasswordAndIsConfirm(String phone,String password,String iscomfirm);
     @Query(value = "select * from people_manage",nativeQuery = true)
     public List<PeopleManage> selectall();
     public List<PeopleManage> findByPhone(String phone);
-    public List<PeopleManage> findByAuthorityAndIscomfirm(String authority,String iscomfirm);
+    public List<PeopleManage> findByAuthorityAndIsConfirm(String authority,String iscomfirm);
     public List<PeopleManage> findByCompanyAndAuthority(String company,String authority);
-    public List<PeopleManage> findByCompanyAndAuthorityAndIscomfirm(String company,String authority,String iscomfirm);
+    public List<PeopleManage> findByCompanyAndAuthorityAndIsConfirm(String company,String authority,String iscomfirm);
 }

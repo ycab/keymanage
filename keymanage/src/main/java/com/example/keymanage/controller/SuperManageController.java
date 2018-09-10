@@ -39,33 +39,33 @@ public class SuperManageController {
         String oper=request.getParameter("oper");
         if(oper.equals("add"))
         {
-            String name=request.getParameter("name");
+            String name=request.getParameter("userName");
             String password=request.getParameter("password");
             String company=request.getParameter("company");
             String department=request.getParameter("department");
             String phone=request.getParameter("phone");
             String authority="超级管理员";
             PeopleManage user=new PeopleManage();
-            user.setName(name);
+            user.setUserName(name);
             user.setPassword(password);
             user.setCompany(company);
             user.setDepartment(department);
             user.setPhone(phone);
             user.setAuthority(authority);
-            user.setIscomfirm("1");
+            user.setIsConfirm("1");
             peopleManageRepository.save(user);
         }
         else if(oper.equals("edit"))
         {
             String id=request.getParameter("id");
-            String name=request.getParameter("name");
+            String name=request.getParameter("userName");
             String password=request.getParameter("password");
             String company=request.getParameter("company");
             String department=request.getParameter("department");
             String phone=request.getParameter("phone");
             String authority="超级管理员";
             PeopleManage user=peopleManageRepository.findById(Integer.parseInt(id)).orElse(null);
-            user.setName(name);
+            user.setUserName(name);
             user.setPassword(password);
             user.setCompany(company);
             user.setDepartment(department);

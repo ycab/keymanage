@@ -48,13 +48,13 @@ public class CabinetController {
         {
             String mac=request.getParameter("mac");
             String company=request.getParameter("company");
-            String name=request.getParameter("name");
+            String cabinetName=request.getParameter("cabinetName");
             String location=request.getParameter("location");
             String numofdoor=request.getParameter("numofdoor");
             Cabinet cabinet=new Cabinet();
             cabinet.setMac(mac);
             cabinet.setCompany(company);
-            cabinet.setName(name);
+            cabinet.setCabinetName(cabinetName);
             cabinet.setLocation(location);
             cabinet.setNumofdoor(Integer.parseInt(numofdoor));
             cabinetRepository.save(cabinet);
@@ -62,7 +62,11 @@ public class CabinetController {
             {
                 GoodsManage goodsManage=new GoodsManage();
                 goodsManage.setMac(mac);
-                goodsManage.setLocation(i+1);
+                goodsManage.setCellNo(i+1);
+                goodsManage.setCabinetName(cabinetName);
+                goodsManage.setCompany(company);
+                goodsManage.setLocation(location);
+                goodsManage.setIsApply("1");
                 goodsManageRepository.save(goodsManage);
             }
 
@@ -72,7 +76,7 @@ public class CabinetController {
             String id=request.getParameter("id");
             String mac=request.getParameter("mac");
             String company=request.getParameter("company");
-            String name=request.getParameter("name");
+            String cabinetName=request.getParameter("cabinetName");
             String location=request.getParameter("location");
             Cabinet cabinetfromdatabase=cabinetRepository.findById(Integer.parseInt(id)).orElse(null);
             String  macfromdatabase=cabinetfromdatabase.getMac();
@@ -80,7 +84,7 @@ public class CabinetController {
             cabinet.setId(Integer.parseInt(id)); //该行代码是为了实现修改数据，去掉后会变成新增数据
             cabinet.setMac(mac);
             cabinet.setCompany(company);
-            cabinet.setName(name);
+            cabinet.setCabinetName(cabinetName);
             cabinet.setLocation(location);
             cabinet.setNumofdoor(cabinetfromdatabase.getNumofdoor());
             cabinetRepository.save(cabinet);
@@ -96,6 +100,14 @@ public class CabinetController {
                     list.get(i).setMac(mac);
                     goodsManageRepository.save(list.get(i));
                 }
+            }
+            List<GoodsManage> goodsManageList=goodsManageRepository.findByMac(mac);
+            for(int i=0;i<goodsManageList.size();i++)
+            {
+                goodsManageList.get(i).setCabinetName(cabinetName);
+                goodsManageList.get(i).setCompany(company);
+                goodsManageList.get(i).setLocation(location);
+                goodsManageRepository.save(goodsManageList.get(i));
             }
         }
         else if(oper.equals("del"))

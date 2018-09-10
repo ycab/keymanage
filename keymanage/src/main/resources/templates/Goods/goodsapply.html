@@ -52,7 +52,7 @@
     <div class="page-content">
         <div class="page-header">
             <h1>
-                物品管理
+                物品审批
             </h1>
         </div><!-- /.page-header -->
 
@@ -177,46 +177,43 @@
                     ]
                 });
             },
-            url:"/goods/cabinetforgoods/getlist",
-            // url: '/User/GetList',
+            url:"/goods/getapplylist",
             //  data: grid_data,
-            caption: "柜子列表",
+            caption: "物品申请表",
             type: "post",
             datatype: "json",
             height: 300,
-            colNames: [' ', 'ID', 'MAC', '公司','柜子名称','地点', '柜门数量',"物品"],
+            colNames: [ 'ID', '柜子', '箱格','物品名称','申请人','申请人电话','审批','审批'],
             colModel: [
+                { name: 'id', index: 'id', width: 60, sortable: true, editable: true, key: true,hidden:true},
                 {
-                    name: 'myac', index: '', width: 40, fixed: true, sortable: false, resize: false,
-                    formatter: 'actions',
-                    formatoptions: {
-                        keys: true,
-                        delbutton: false,//disable delete button
-
-                        delOptions: { recreateForm: true, beforeShowForm: beforeDeleteCallback },
-                        editformbutton:true, editOptions:{recreateForm: true, beforeShowForm:beforeEditCallback,closeAfterEdit: true , afterComplete: function () {
-                            var url = "/goods/cabinetforgoods/getlist";
-                            //var url = "~/User/GetList2" ;
-                            $("#grid-table").jqGrid("setGridParam", { datatype: 'json', page: 1, loadonce: true, url: url }).trigger("reloadGrid");
-                        }}
-                    }
-                },
-                { name: 'id', index: 'id', width: 60, sortable: true, editable: true,hidden:true },
-                {
-                    name: 'mac', index: 'mac', width: 60, sortable: true, editable: false, editrules: {
+                    name: 'cabinetName', index: 'cabinetName', width: 60, sortable: true, editable: true, editrules: {
                     required: true,
                     edithidden: true,
-                    key: true
+
                 }
                 },
-                { name: 'company', index: 'company', width: 60, sortable: true, editable: false},
-                { name: 'cabinetName', index: 'cabinetName', width: 60, sortable: true, editable: true },
-                { name: 'location', index: 'location', width: 60, sortable: true, editable: true },
-                { name: 'numofdoor', index: 'numofdoor', width: 40, sortable: true, editable:false,search:false},
                 {
-                    name: 'myac', index: '', width: 40, fixed: true, sortable: false, resize: false,
+                    name: 'cellNo', index: 'cellNo', width: 60, sortable: true, editable: true, edittype: "password",
+                    editoptions: { size: "20", maxlength: "30" }, editrules: {
+                    required: true,
+                    edithidden: true,
+
+                }
+                },
+                { name: 'goodName', index: 'goodName', width: 60, sortable: true, editable: true },
+                { name: 'userName', index: 'userName', width: 60, sortable: true, editable: true },
+                { name: 'phone', index: 'phone', width: 60, sortable: true, editable: true },
+                {
+                    name: 'myac', index: '', width: 50, fixed: true, sortable: false, resize: false,
                     formatter: function (cellvalue, options, rowObject) {
-                        return " <a  role=\"button\" class=\"blue\"  onclick=\"GoodsConfiguration(" + rowObject.id + ")\">" + "配置" + "</a>";
+                        return " <a  role=\"button\" class=\"blue\"  onclick=\"applypass(" + rowObject.id + ")\">" + "通过" + "</a>";
+                    }
+                },
+                {
+                    name: 'myac', index: '', width: 50, fixed: true, sortable: false, resize: false,
+                    formatter: function (cellvalue, options, rowObject) {
+                        return " <a  role=\"button\" class=\"blue\"  onclick=\"applynotpass(" + rowObject.id + ")\">" + "不通过" + "</a>";
                     }
                 },
             ],
@@ -246,7 +243,7 @@
             },
 
             //editurl: '/User/ManagerEdit',
-            editurl: "/goods/cabinetforgoods/edit",
+            editurl: "/user/edit",
 
             //,autowidth: true,
 
@@ -293,7 +290,7 @@
         //navButtons
         jQuery(grid_selector).jqGrid('navGrid', pager_selector,
             { 	//navbar options
-                edit: true,
+                edit: false,
                 editicon: 'ace-icon fa fa-pencil blue',
                 add: false,
                 addicon: 'ace-icon fa fa-plus-circle purple',
@@ -317,7 +314,7 @@
                     style_edit_form(form);
                 },
                 closeAfterEdit: true,
-                url: "/goods/cabinetforgoods/edit",
+                url: "/user/edit",
                 // url: '/User/ManagerEdit',
                 mtype: 'POST',
                 closeAfterSubmit: true,
@@ -343,7 +340,7 @@
                     style_edit_form(form);
                 },
                 afterComplete: function () {
-                    var url ="/goods/cabinetforgoods/getlist";
+                    var url ="/goods/getapplylist";
                     $("#grid-table").jqGrid("setGridParam", { datatype: 'json', page: 1, loadonce: true, url: url }).trigger("reloadGrid");
                 }
             },
@@ -363,8 +360,36 @@
                 // closeAfterDel: true,
                 closeAfterEdit: true,
                 //url: '/User/ManagerEdit',
-                url: "/goods/cabinetforgoods/edit",
+                url: "/user/edit",
                 mtype: 'POST',
+                //  data:  {Userid:celldata},
+                //afterSubmit: function (xhr, postdata) {
+                //    //var selectedRowIds = $("#grid-table").jqGrid("getGridParam", "selarrrow");
+                //    //var len = selectedRowIds.length;
+                //    //var UserId =new Array();
+                //    //for (var i = 0; i <len; i++) {
+                //    //    UserId[i]=datas[selectedRowIds[i]-1].UserId;
+                //    //}
+                //    var rowid = $("#grid-table").jqGrid('getGridParam', 'selrow');
+                //    var celldata=$("#grid-table").jqGrid('getCell',rowid,'UserID');
+                //    //post userId组到后台，让后台删除（PS：这里是我的逻辑实现，我的后台是对userId进行删除的）
+                //    $.ajax({
+                //        type: "post",
+                //        url: "~/User/Delete",
+                //        data: {UserID:celldata},
+                //        dataType: "json",
+                //        success: function (data) {
+                //            //判断后台是否删除成功
+                //            //如果成功则调用jqGrid的delRowData方法逐个删除行id
+                //            if(data.success==1){
+                //                for (var i = 0; i < len; i++) {
+                //                    $("#grid-pager").jqGrid("delRowData", selectedRowIds[0],{reloadAfterSubmit:false});
+                //                }
+                //            }
+                //        }
+                //    });
+
+                //},
                 onClick: function (e) {
                     alert(1);
                 }
@@ -372,7 +397,7 @@
             {
                 //search form
                 // url: '/User/ManagerEdit',
-                url: "/goods/cabinetforgoods/edit",
+                url: "/user/edit",
                 mtype: 'POST',
                 recreateForm: true,
                 afterShowSearch: function (e) {
@@ -400,13 +425,62 @@
                 }
             }
         )
+        //.jqGrid('navButtonAdd',pager_selector,{              //原为).jqgrid
+        //        buttonicon:'icon-globe purple',
+        //        caption:'',
+        //        position:'last',
+        //        title:'查看历史记录',
+        //        onClickButton:function(){
+        //            //获得某行id
+        //            var gr = jQuery("#grid-table").jqGrid('getGridParam', 'selrow');
+        //            //获得某行数据
+        //            var grr = jQuery("#grid-table").jqGrid('getRowData',gr);
+        //            if (gr != null) {
+        //                var diag = new Dialog();
+        //                diag.Width = 600;
+        //                diag.Height = 300;
+        //                diag.Title = "历史数据展示";
+        //                diag.URL = "~/left.html?id="+gr;
+        //                diag.OKEvent = function(){diag.close();};//点击确定后调用的方法
+        //                diag.show();
+
+        //            }
+        //            else alert("Please Select Row");
+
+        //        }
+        //    }).jqGrid('navButtonAdd',pager_selector,{
+        //        buttonicon:'icon-eye-open',
+        //        caption:'',
+        //        position:'last',
+        //        title:'表单验证',
+        //        onClickButton:function(){
+        //            debugger;
+        //            //获得某行id
+        //            var gr = jQuery("#grid-table").jqGrid('getGridParam', 'selrow');
+        //            //获得某行数据
+        //            var grr = jQuery("#grid-table").jqGrid('getRowData',gr);
+        //            if (gr != null) {
+        //                var diag = new Dialog();
+        //                diag.Width = 600;
+        //                diag.Height = 300;
+        //                diag.Title = "表单验证";
+        //                diag.URL = "~/form.html";
+        //                diag.OKEvent = function(){diag.close();};//点击确定后调用的方法
+        //                diag.show();
+
+        //            }
+        //            else alert("Please Select Row");
+
+        //        }
+        //    })
 
         function style_edit_form(form) {
             //enable datepicker on "sdate" field and switches for "stock" field
             form.find('input[name=sdate]').datepicker({ format: 'yyyy-mm-dd', autoclose: true })
 
             form.find('input[name=stock]').addClass('ace ace-switch ace-switch-5').after('<span class="lbl"></span>');
-
+            //don't wrap inside a label element, the checkbox value won't be submitted (POST'ed)
+            //.addClass('ace ace-switch ace-switch-5').wrap('<label class="inline" />').after('<span class="lbl"></span>');
 
 
             //update buttons classes
@@ -525,9 +599,53 @@
             $('.ui-jqdialog').remove();
         });
     });
-    function GoodsConfiguration(id)
+    function applypass(id)
     {
-        window.location.href="/home/goods?id="+id;
+        var userinfo = {
+            id: id,
+        };
+        var url = "/goods/pass";
+        $.ajax({
+            type: 'post',
+            url: url,
+            data: userinfo,
+            success: function (data) {
+                if (data == "ok") {
+                    var url ="/goods/getapplylist";
+                    $("#grid-table").jqGrid("setGridParam", { datatype: 'json', page: 1, loadonce: true, url: url }).trigger("reloadGrid");
+                }
+                else {
+                    alert("账户或密码错误");
+                }
+            },
+            error: function () {
+                alert("error");
+            }
+        });
+    }
+    function applynotpass(id)
+    {
+        var userinfo = {
+            id: id,
+        };
+        var url = "/goods/notpass";
+        $.ajax({
+            type: 'post',
+            url: url,
+            data: userinfo,
+            success: function (data) {
+                if (data == "ok") {
+                    var url ="/goods/getapplylist";
+                    $("#grid-table").jqGrid("setGridParam", { datatype: 'json', page: 1, loadonce: true, url: url }).trigger("reloadGrid");
+                }
+                else {
+                    alert("账户或密码错误");
+                }
+            },
+            error: function () {
+                alert("error");
+            }
+        });
     }
 </script>
 

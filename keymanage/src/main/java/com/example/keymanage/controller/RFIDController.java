@@ -34,7 +34,7 @@ public class RFIDController {
         String id=request.getParameter("id");
         Cabinet cabinets=cabinetRepository.findById(Integer.parseInt(id)).orElse(null);
         String mac=cabinets.getMac();
-        List<GoodsManage> list= goodsManageRepository.findByMacOrderByLocation(mac);
+        List<GoodsManage> list= goodsManageRepository.findByMacOrderByCellNo(mac);
         String json= JSON.toJSONString(list);
         return json;
 

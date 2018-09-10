@@ -72,4 +72,7 @@ public class HomeController {
         model.addAttribute("id", id);
         return "/Goods/goods.html";
     }
+    @GetMapping(value="/goodsapply")
+    public String goodsapply()
+    {return "/Goods/goodsapply.html";}
 }

@@ -17,15 +17,19 @@ public class GoodsManage {
     @Id
     @GeneratedValue
     private Integer id;
-    private String name;         //物品名称
+    private String goodName;         //物品名称
     private String mac;           //物品mac
-    private Integer location;     //箱格位置
+    private String company;      //公司
+    private String location;     //柜子位置
     private String needApproved;//是否需要审批
     private String rfid;         //rfid
     private String userName;     //当前使用者姓名
-    private String userPhone;    //当前使用者电话
+    private String phone;    //当前使用者电话
     private String goodsStatus; //物品状态 0为可借 1为成功申请还未使用 2为使用中
     private String doorStatus;  //箱格状态 0为门关闭 1为门打开
+    private String isApply;
+    private String cabinetName;//柜子名称
+    private Integer cellNo;//箱格编号
 
     public Integer getId() {
         return id;
@@ -35,12 +39,12 @@ public class GoodsManage {
         this.id = id;
     }
 
-    public String getName() {
-        return name;
+    public String getGoodName() {
+        return goodName;
     }
 
-    public void setName(String name) {
-        this.name = name;
+    public void setGoodName(String goodName) {
+        this.goodName = goodName;
     }
 
     public String getMac() {
@@ -51,11 +55,11 @@ public class GoodsManage {
         this.mac = mac;
     }
 
-    public Integer getLocation() {
+    public String getLocation() {
         return location;
     }
 
-    public void setLocation(Integer location) {
+    public void setLocation(String location) {
         this.location = location;
     }
 
@@ -83,12 +87,12 @@ public class GoodsManage {
         this.userName = userName;
     }
 
-    public String getUserPhone() {
-        return userPhone;
+    public String getPhone() {
+        return phone;
     }
 
-    public void setUserPhone(String userPhone) {
-        this.userPhone = userPhone;
+    public void setPhone(String phone) {
+        this.phone = phone;
     }
 
     public String getGoodsStatus() {
@@ -105,5 +109,37 @@ public class GoodsManage {
 
     public void setDoorStatus(String doorStatus) {
         this.doorStatus = doorStatus;
+    }
+
+    public String getIsApply() {
+        return isApply;
+    }
+
+    public void setIsApply(String isApply) {
+        this.isApply = isApply;
+    }
+
+    public String getCabinetName() {
+        return cabinetName;
+    }
+
+    public void setCabinetName(String cabinetName) {
+        this.cabinetName = cabinetName;
+    }
+
+    public String getCompany() {
+        return company;
+    }
+
+    public void setCompany(String company) {
+        this.company = company;
+    }
+
+    public Integer getCellNo() {
+        return cellNo;
+    }
+
+    public void setCellNo(Integer cellNo) {
+        this.cellNo = cellNo;
     }
 }

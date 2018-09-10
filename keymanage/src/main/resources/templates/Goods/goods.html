@@ -52,10 +52,10 @@
     <div class="page-content">
         <div class="page-header">
             <h1>
-                柜子管理
+                物品管理
                 <small>
                     <i class="ace-icon fa fa-angle-double-right"></i>
-                    柜子分配
+                    物品配置
                 </small>
             </h1>
         </div><!-- /.page-header -->
@@ -188,7 +188,7 @@
             type: "post",
             datatype: "json",
             height: 300,
-            colNames: [' ', 'ID', '箱格','物品名称', '是否需要审批'],
+            colNames: [' ', 'ID', '箱格','物品名称', '是否需要审批','使用者','电话'],
             colModel: [
                 {
                     name: 'myac', index: '', width: 40, fixed: true, sortable: false, resize: false,
@@ -210,16 +210,14 @@
                             },}
                     }
                 },
-                { name: 'id', index: 'id', width: 60, sortable: true, editable: true, },
+                { name: 'id', index: 'id', width: 60, sortable: true, editable: true, hidden:true},
                 {
-                    name: 'location', index: 'mac', width: 60, sortable: true, editable: true, editrules: {
-                    required: true,
-                    edithidden: true,
-                    key: true
-                }
+                    name: 'cellNo', index: 'cellNo', width: 60, sortable: true, editable: false,
                 },
-                { name: 'name', index: 'name', width: 60, sortable: true, editable: true },
-                { name: 'needApproved', index: 'needApproved', width: 60, sortable: true, editable: true },
+                { name: 'goodName', index: 'goodName', width: 60, sortable: true, editable: true },
+                { name: 'needApproved', index: 'needApproved', width: 60, sortable: true, editable: true,edittype: "select", editoptions: { value: "是:是;否:否" }},
+                { name: 'userName', index: 'userName', width: 60, sortable: true, editable: false },
+                { name: 'phone', index: 'phone', width: 60, sortable: true, editable: false },
             ],
 
             viewrecords: true,
@@ -296,9 +294,9 @@
             { 	//navbar options
                 edit: true,
                 editicon: 'ace-icon fa fa-pencil blue',
-                add: true,
+                add: false,
                 addicon: 'ace-icon fa fa-plus-circle purple',
-                del: true,
+                del: false,
                 delicon: 'ace-icon fa fa-trash-o red',
                 search: true,
                 searchicon: 'ace-icon fa fa-search orange',

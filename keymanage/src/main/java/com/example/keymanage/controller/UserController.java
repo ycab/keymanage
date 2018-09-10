@@ -3,6 +3,7 @@ package com.example.keymanage.controller;
 import com.alibaba.fastjson.JSON;
 import com.example.keymanage.dao.PeopleManageRepository;
 import com.example.keymanage.model.PeopleManage;
+import com.example.keymanage.service.TemplateMsgService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.client.OkHttp3ClientHttpRequestFactory;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -13,6 +14,8 @@ import org.springframework.web.bind.annotation.RestController;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 import java.awt.*;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.List;
 
 /**
@@ -27,6 +30,8 @@ import java.util.List;
 public class UserController {
     @Autowired
     private PeopleManageRepository peopleManageRepository;
+    @Autowired
+    TemplateMsgService templateMsgService;
     @PostMapping("/usercodeedit")
     public String usercodemanage(HttpServletRequest request)
     {
@@ -52,7 +57,7 @@ public class UserController {
     public String getlist(HttpSession session)
     {
         String company=session.getAttribute("company").toString();
-        List<PeopleManage> list=peopleManageRepository.findByCompanyAndAuthorityAndIscomfirm(company,"用户","1");
+        List<PeopleManage> list=peopleManageRepository.findByCompanyAndAuthorityAndIsConfirm(company,"用户","1");
         String json= JSON.toJSONString(list);
         return json;
     }
@@ -62,14 +67,14 @@ public class UserController {
         String oper=request.getParameter("oper");
         if(oper.equals("add"))
         {
-            String name=request.getParameter("name");
+            String userName=request.getParameter("userName");
             String password=request.getParameter("password");
             String department=request.getParameter("department");
             String phone=request.getParameter("phone");
             String company=session.getAttribute("company").toString();
             String authority="用户";
             PeopleManage user=new PeopleManage();
-            user.setName(name);
+            user.setUserName(userName);
             user.setPassword(password);
             user.setCompany(company);
             user.setDepartment(department);
@@ -80,13 +85,13 @@ public class UserController {
         else if(oper.equals("edit"))
         {
             String id=request.getParameter("id");
-            String name=request.getParameter("name");
+            String name=request.getParameter("userName");
             String password=request.getParameter("password");
             String department=request.getParameter("department");
             String phone=request.getParameter("phone");
             String authority="用户";
             PeopleManage user=peopleManageRepository.findById(Integer.parseInt(id)).orElse(null);
-            user.setName(name);
+            user.setUserName(name);
             user.setPassword(password);
             user.setDepartment(department);
             user.setPhone(phone);
@@ -111,7 +116,9 @@ public class UserController {
     {
         String id=request.getParameter("id");
         PeopleManage peopleManage=peopleManageRepository.findById(Integer.parseInt(id)).orElse(null);
-        peopleManage.setIscomfirm("1");
+        peopleManage.setIsConfirm("1");
+        SimpleDateFormat df=new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+        templateMsgService.WeChatTemplateMsgService(peopleManage.getOpenid(),"通过",df.format(new Date()));
         peopleManageRepository.save(peopleManage);
         return "ok";
     }
@@ -119,7 +126,10 @@ public class UserController {
     public String notpass(HttpServletRequest request)
     {
         String id=request.getParameter("id");
+        String openid=peopleManageRepository.findById(Integer.parseInt(id)).orElse(null).getOpenid();
         peopleManageRepository.deleteById(Integer.parseInt(id));
+        SimpleDateFormat df=new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+        templateMsgService.WeChatTemplateMsg1Service(openid,"未通过",df.format(new Date()));
         return "ok";
     }
     @GetMapping("/getapplylist")
@@ -127,7 +137,7 @@ public class UserController {
     {
         String id=request.getParameter("id");
         String company=session.getAttribute("company").toString();
-        List<PeopleManage> list=peopleManageRepository.findByCompanyAndAuthorityAndIscomfirm(company,"用户","0");
+        List<PeopleManage> list=peopleManageRepository.findByCompanyAndAuthorityAndIsConfirm(company,"用户","0");
         String json= JSON.toJSONString(list);
         return json;
     }

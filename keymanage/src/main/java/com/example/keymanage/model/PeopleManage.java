@@ -18,14 +18,14 @@ public class PeopleManage {
     @Id
     @GeneratedValue
     private Integer id;
-    private String name;
+    private String userName;
     private String password;
     private String company;
     private String department;
     private String authority;
     private String phone;
     private String openid;
-    private String iscomfirm;
+    private String isConfirm;
 
     public Integer getId() {
         return id;
@@ -35,12 +35,12 @@ public class PeopleManage {
         this.id = id;
     }
 
-    public String getName() {
-        return name;
+    public String getUserName() {
+        return userName;
     }
 
-    public void setName(String name) {
-        this.name = name;
+    public void setUserName(String userName) {
+        this.userName = userName;
     }
 
     public String getCompany() {
@@ -91,11 +91,11 @@ public class PeopleManage {
         this.openid = openid;
     }
 
-    public String getIscomfirm() {
-        return iscomfirm;
+    public String getIsConfirm() {
+        return isConfirm;
     }
 
-    public void setIscomfirm(String iscomfirm) {
-        this.iscomfirm = iscomfirm;
+    public void setIsConfirm(String isConfirm) {
+        this.isConfirm = isConfirm;
     }
 }

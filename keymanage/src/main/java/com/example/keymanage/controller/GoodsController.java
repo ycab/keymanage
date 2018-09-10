@@ -1,10 +1,14 @@
 package com.example.keymanage.controller;
 
 import com.alibaba.fastjson.JSON;
+import com.example.keymanage.dao.ApplyRepository;
 import com.example.keymanage.dao.CabinetRepository;
 import com.example.keymanage.dao.GoodsManageRepository;
+import com.example.keymanage.model.Apply;
 import com.example.keymanage.model.Cabinet;
 import com.example.keymanage.model.GoodsManage;
+import com.example.keymanage.model.PeopleManage;
+import com.example.keymanage.service.TemplateMsgService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -12,6 +16,9 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpSession;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.List;
 
 /**
@@ -28,10 +35,16 @@ public class GoodsController {
     private CabinetRepository cabinetRepository;
     @Autowired
     private GoodsManageRepository goodsManageRepository;
+    @Autowired
+    private ApplyRepository applyRepository;
+    @Autowired
+    TemplateMsgService templateMsgService;
+
     @GetMapping("/cabinetforgoods/getlist")
-    public String getlist()
+    public String getlist(HttpSession session)
     {
-        List<Cabinet> list=cabinetRepository.findAll();
+        String company=session.getAttribute("company").toString();
+        List<Cabinet> list=cabinetRepository.findByCompany(company);
         String json= JSON.toJSONString(list);
         return json;
     }
@@ -41,79 +54,30 @@ public class GoodsController {
         String oper=request.getParameter("oper");
         if(oper.equals("add"))
         {
-            String mac=request.getParameter("mac");
-            String company=request.getParameter("company");
-            String name=request.getParameter("name");
-            String location=request.getParameter("location");
-            String numofdoor=request.getParameter("numofdoor");
-            Cabinet cabinet=new Cabinet();
-            cabinet.setMac(mac);
-            //cabinet.setCompany(company);
-            cabinet.setName(name);
-            cabinet.setLocation(location);
-            cabinet.setNumofdoor(Integer.parseInt(numofdoor));
-            cabinetRepository.save(cabinet);
-            for(int i=0;i<Integer.parseInt(numofdoor);i++)
-            {
-                GoodsManage goodsManage=new GoodsManage();
-                goodsManage.setMac(mac);
-                goodsManage.setLocation(i+1);
-                goodsManageRepository.save(goodsManage);
-            }
 
         }
         else if(oper.equals("edit"))
         {
             String id=request.getParameter("id");
-            String mac=request.getParameter("mac");
-            String company=request.getParameter("company");
-            String name=request.getParameter("name");
+            String cabinetName=request.getParameter("cabinetName");
             String location=request.getParameter("location");
-            String numofdoor=request.getParameter("numofdoor");
 
-            Cabinet cabinetfromdatabase=cabinetRepository.findById(Integer.parseInt(id)).orElse(null);
-            String  macfromdatabase=cabinetfromdatabase.getMac();
-            Cabinet cabinet=new Cabinet();
+            Cabinet cabinet=cabinetRepository.findById(Integer.parseInt(id)).orElse(null);
             cabinet.setId(Integer.parseInt(id)); //该行代码是为了实现修改数据，去掉后会变成新增数据
-            cabinet.setMac(mac);
-            cabinet.setCompany(company);
-            cabinet.setName(name);
+            cabinet.setCabinetName(cabinetName);
             cabinet.setLocation(location);
-            cabinet.setNumofdoor(Integer.parseInt(numofdoor));
             cabinetRepository.save(cabinet);
-            int b=0;
-            b++;
-            if(macfromdatabase.equals(mac))
+            List<GoodsManage> goodsManageList=goodsManageRepository.findByMac(cabinet.getMac());
+            for(int i=0;i<goodsManageList.size();i++)
             {
+                goodsManageList.get(i).setCabinetName(cabinetName);
+                goodsManageRepository.save(goodsManageList.get(i));
+            }
 
-            }
-            else
-            {
-                List<GoodsManage> list= goodsManageRepository.findByMac(macfromdatabase);
-                for(int i=0;i<list.size();i++)
-                {
-                    list.get(i).setMac(mac);
-                    goodsManageRepository.save(list.get(i));
-                }
-            }
         }
         else if(oper.equals("del"))
         {
-            String[] idArray=null;
-            idArray=request.getParameter("id").split(",");
-            for(int i=0;i<idArray.length;i++)
-            {
-                Cabinet cabinet=cabinetRepository.findById(Integer.parseInt(idArray[i])).orElse(null);
-                cabinetRepository.deleteById(Integer.parseInt(idArray[i]));
-                String mac=cabinet.getMac();
-                List<GoodsManage> list= goodsManageRepository.findByMac(mac);
-                for(int j=0;j<list.size();j++)
-                {
-                    goodsManageRepository.deleteById(list.get(j).getId());
-                }
-            }
-            //int id=Integer.parseInt(request.getParameter("id"));
-            //peopleManageRepository.deleteById(id);
+
         }
         return "ok";
     }
@@ -124,7 +88,7 @@ public class GoodsController {
         String id=request.getParameter("id");
         Cabinet cabinets=cabinetRepository.findById(Integer.parseInt(id)).orElse(null);
         String mac=cabinets.getMac();
-        List<GoodsManage> list= goodsManageRepository.findByMac(mac);
+        List<GoodsManage> list= goodsManageRepository.findByMacOrderByCellNo(mac);
         String json= JSON.toJSONString(list);
         return json;
 
@@ -140,10 +104,10 @@ public class GoodsController {
         else if(oper.equals("edit"))
         {
             String id=request.getParameter("id");
-            String name =request.getParameter("name");
+            String goodName =request.getParameter("goodName");
             String needApproved=request.getParameter("needApproved");
             GoodsManage goodsManage=goodsManageRepository.findById(Integer.parseInt(id)).orElse(null);
-            goodsManage.setName(name);
+            goodsManage.setGoodName(goodName);
             goodsManage.setNeedApproved(needApproved);
             goodsManageRepository.save(goodsManage);
         }
@@ -153,5 +117,46 @@ public class GoodsController {
         }
         return "ok";
     }
+
+    @PostMapping("/pass")
+    public String pass(HttpServletRequest request)
+    {
+        String id=request.getParameter("id");
+        Apply apply=applyRepository.findById(Integer.parseInt(id)).orElse(null);
+        String mac=apply.getMac();
+        Integer cellNo=apply.getCellNo();
+        String username=apply.getUserName();
+        String phone=apply.getPhone();
+        List<GoodsManage> goodsManageList=goodsManageRepository.findByMacAndCellNo(mac,cellNo);
+        goodsManageList.get(0).setUserName(username);
+        goodsManageList.get(0).setPhone(phone);
+        goodsManageList.get(0).setIsApply("0");
+        goodsManageRepository.save(goodsManageList.get(0));
+        apply.setIsApply("1");
+        applyRepository.save(apply);
+        SimpleDateFormat df=new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+        templateMsgService.WeChatTemplateMsg2Service(apply.getOpenid(),"通过",df.format(new Date()));
+        return "ok";
+    }
+    @PostMapping("/notpass")
+    public String notpass(HttpServletRequest request)
+    {
+        String id=request.getParameter("id");
+        Apply apply=applyRepository.findById(Integer.parseInt(id)).orElse(null);
+        apply.setIsApply("2");
+        applyRepository.save(apply);
+        SimpleDateFormat df=new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+        templateMsgService.WeChatTemplateMsg3Service(apply.getOpenid(),"未通过",df.format(new Date()));
+        return "ok";
+    }
+    @GetMapping("/getapplylist")
+    public String getapplylist(HttpServletRequest request,HttpSession session)
+    {
+        String company=session.getAttribute("company").toString();
+        List<Apply> list=applyRepository.findByCompanyAndIsApply(company,"0");
+        String json= JSON.toJSONString(list);
+        return json;
+    }
+
 
 }
